@@ -4,6 +4,7 @@ from aiogram.dispatcher.filters.builtin import Text
 logging.basicConfig(level=logging.INFO)
 from os import getenv
 from sys import exit
+from bot_templates import modules_keyboard
 
 """getting bot token from env - for secutiry reasons"""
 bot_token = getenv("BOT_TOKEN")
@@ -23,18 +24,18 @@ async def welcome(message: types.Message):
 
 @dp.message_handler(lambda message: message.text == "Показати модулі")
 async def without_puree(message: types.Message):
-    modules = [['module 1', '1'], ['module 2', '2'], ['module 3', '3']]          #write a method that will return a list of modules later
+    modules = get_modules_list()
     keyboard = types.InlineKeyboardMarkup()
     for i in modules:
         keyboard.add(types.InlineKeyboardButton(text="Модуль " + i[0], callback_data="select_module_"+i[1]))
 
     await message.reply(text = "Ось це треба буде пофіксити", reply_markup=types.ReplyKeyboardRemove())   #to fix later
-    await message.answer(" Обери модуль", reply_markup=keyboard)
+    await message.answer("Обери модуль", reply_markup=keyboard)
 
 @dp.callback_query_handler(Text(startswith="select_module_"))
 async def callback_module(call: types.CallbackQuery):
     identifier = call.data.split("_")[2]
-    #to write a method that will chech whether a person have previously completed this module
+    #to write a method that will check whether a person have previously completed this module
     #to write a method that will get a message with the module
     await call.message.delete()
     keyboard = types.InlineKeyboardMarkup()
@@ -56,6 +57,7 @@ async def callback_start(call: types.CallbackQuery):
 
 @dp.callback_query_handler(Text(startswith="continue"))
 async def callback_continue(call: types.CallbackQuery):
+    #to do a lot
     await call.answer("Not done yet", show_alert=True)
 
 @dp.callback_query_handler(Text(startswith="cancel_selection"))
