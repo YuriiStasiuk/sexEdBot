@@ -23,12 +23,11 @@ async def welcome(message: types.Message):
     await message.answer("Привітальне повідомлення", reply_markup=poll_keyboard)
 
 @dp.message_handler(lambda message: message.text == "Показати модулі")
-async def without_puree(message: types.Message):
-    modules = get_modules_list()
+async def modules_list(message: types.Message):
+    modules = [["Назва модулю", "Ідентифікатор модулю"], ['назва іншого модулю', "ідентифікатор іншого модулю"]]
     keyboard = types.InlineKeyboardMarkup()
     for i in modules:
         keyboard.add(types.InlineKeyboardButton(text="Модуль " + i[0], callback_data="select_module_"+i[1]))
-
     await message.reply(text = "Ось це треба буде пофіксити", reply_markup=types.ReplyKeyboardRemove())   #to fix later
     await message.answer("Обери модуль", reply_markup=keyboard)
 

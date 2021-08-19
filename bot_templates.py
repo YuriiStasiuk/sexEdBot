@@ -4,7 +4,7 @@ def get_modules_list():
     pass
     #to do later
 
-def modules_keyboard():
+def modules_template():
     modules = get_modules_list()
     keyboard = types.InlineKeyboardMarkup()
     for i in modules:
