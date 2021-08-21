@@ -1,10 +1,11 @@
 import logging
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters.builtin import Text
+import asyncio
 logging.basicConfig(level=logging.INFO)
 from os import getenv
 from sys import exit
-from bot_templates import modules_keyboard
+from bot_templates import modules_template
 
 """getting bot token from env - for secutiry reasons"""
 bot_token = getenv("BOT_TOKEN")
@@ -22,14 +23,11 @@ async def welcome(message: types.Message):
     poll_keyboard.add(*buttons)
     await message.answer("Привітальне повідомлення", reply_markup=poll_keyboard)
 
-@dp.message_handler(lambda message: message.text == "Показати модулі")
-async def modules_list(message: types.Message):
-    modules = [["Назва модулю", "Ідентифікатор модулю"], ['назва іншого модулю', "ідентифікатор іншого модулю"]]
-    keyboard = types.InlineKeyboardMarkup()
-    for i in modules:
-        keyboard.add(types.InlineKeyboardButton(text="Модуль " + i[0], callback_data="select_module_"+i[1]))
+@dp.message_handler(lambda message: message.text == "Показати модулі")  #async bug here
+async def show_modules_list(message: types.Message):
+    message_text, keyboard = asyncio.run(modules_template())
     await message.reply(text = "Ось це треба буде пофіксити", reply_markup=types.ReplyKeyboardRemove())   #to fix later
-    await message.answer("Обери модуль", reply_markup=keyboard)
+    await message.answer(message_text, reply_markup=keyboard)
 
 @dp.callback_query_handler(Text(startswith="select_module_"))
 async def callback_module(call: types.CallbackQuery):
