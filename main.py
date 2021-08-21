@@ -25,7 +25,7 @@ async def welcome(message: types.Message):
 
 @dp.message_handler(lambda message: message.text == "Показати модулі")  #async bug here
 async def show_modules_list(message: types.Message):
-    message_text, keyboard = asyncio.run(modules_template())
+    message_text, keyboard = modules_template()
     await message.reply(text = "Ось це треба буде пофіксити", reply_markup=types.ReplyKeyboardRemove())   #to fix later
     await message.answer(message_text, reply_markup=keyboard)
 
