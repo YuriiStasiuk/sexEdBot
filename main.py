@@ -5,7 +5,7 @@ import asyncio
 logging.basicConfig(level=logging.INFO)
 from os import getenv
 from sys import exit
-from bot_templates import modules_template
+from bot_templates import modules_template, welcome_message
 
 """getting bot token from env - for secutiry reasons"""
 bot_token = getenv("BOT_TOKEN")
@@ -17,11 +17,9 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start'])
 async def welcome(message: types.Message):
-    #add user to database
-    poll_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)   #to change this - so this markup can be getted using some method
-    buttons = ['Показати модулі', 'Інший булшіт який зробимо в майбутньому']
-    poll_keyboard.add(*buttons)
-    await message.answer("Привітальне повідомлення", reply_markup=poll_keyboard)
+    # todo add user to database
+    welcomeMessage, pollKeyboard = welcome_message()
+    await message.answer(welcomeMessage, reply_markup=pollKeyboard)
 
 @dp.message_handler(lambda message: message.text == "Показати модулі")  #async bug here
 async def show_modules_list(message: types.Message):
