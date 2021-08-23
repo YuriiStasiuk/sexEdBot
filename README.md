@@ -1,4 +1,4 @@
-# sexEdBot   
+# sexEdBot
 
 This is a Telegram bot for the sex ed classes in schools. 
 
